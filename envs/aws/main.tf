@@ -1,14 +1,15 @@
 module "aws_tailscale_router" {
   source = "../../modules/aws-tailscale-router"
 
-  prefix              = "ts-aws-demo"
-  vpc_cidr            = "10.10.0.0/16"
-  az                  = "ca-central-1a"
-  public_subnet_cidr  = "10.10.1.0/24"
-  private_subnet_cidr = "10.10.2.0/24"
+  prefix              = var.prefix
+  vpc_cidr            = var.vpc_cidr
+  az                  = var.az
+  public_subnet_cidr  = var.public_subnet_cidr
+  private_subnet_cidr = var.private_subnet_cidr
 
-  tags = {
-    project = "tailscale-multicloud-demo"
-    env     = "demo"
-  }
+  tags = var.tags
+
+  # ami_id             = var.ami_id
+  # ssh_key_name       = var.ssh_key_name
+  tailscale_auth_key = var.tailscale_auth_key
 }
