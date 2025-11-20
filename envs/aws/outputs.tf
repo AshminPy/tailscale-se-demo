@@ -37,3 +37,13 @@ output "private_route_table_id" {
   description = "Private route table ID"
   value       = module.aws_tailscale_router.private_route_table_id
 }
+
+output "router_sg_id" {
+  description = "Security group ID for the Tailscale router"
+  value       = module.aws_tailscale_router.router_sg_id
+}
+
+output "private_sg_id" {
+  description = "Security group ID for the private EC2 instance"
+  value       = module.aws_tailscale_router.private_sg_id
+}
