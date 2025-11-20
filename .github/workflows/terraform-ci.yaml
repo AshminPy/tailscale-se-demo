@@ -37,6 +37,10 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
+
   gcp:
     name: GCP Terraform (OIDC / Workload Identity)
     runs-on: ubuntu-latest
@@ -63,3 +67,7 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
