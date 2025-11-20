@@ -16,7 +16,7 @@ output "private_subnet_id" {
   value       = module.aws_network.private_subnets[0]
 }
 
-# Internet Gateway ID
+# Internet Gateway ID.
 output "igw_id" {
   description = "Internet Gateway for public subnet"
   value       = module.aws_network.igw_id
@@ -44,4 +44,14 @@ output "public_route_table_id" {
 output "private_route_table_id" {
   description = "Private route table ID"
   value       = module.aws_network.private_route_table_ids[0]
+}
+
+output "router_sg_id" {
+  description = "Security group ID for the Tailscale router"
+  value       = aws_security_group.router_sg.id
+}
+
+output "private_sg_id" {
+  description = "Security group ID for the private EC2 instance"
+  value       = aws_security_group.private_sg.id
 }
