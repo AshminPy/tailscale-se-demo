@@ -34,6 +34,8 @@ After deploy, you can:
 
 ## 💡 Use cases: replace VPNs, cross-cloud access, secure internal connectivity.
 
+## AWS Tailscale Subnet Router Architecture
+
 ![AWS Tailscale Subnet Router Architecture](docs/tailscale-aws-subnet-router.png)
 
 ---
