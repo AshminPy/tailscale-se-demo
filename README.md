@@ -32,7 +32,9 @@ After deploy, you can:
 3. Tailscale distributes this route.
 4. All Tailnet devices can access the private EC2 securely.
 
-💡 Use cases: replace VPNs, cross-cloud access, secure internal connectivity.
+## 💡 Use cases: replace VPNs, cross-cloud access, secure internal connectivity.
+
+![AWS Tailscale Subnet Router Architecture](docs/tailscale-aws-subnet-router.png)
 
 ---
 
