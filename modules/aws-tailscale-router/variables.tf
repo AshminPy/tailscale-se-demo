@@ -57,8 +57,3 @@ variable "aws_region" {
   type        = string
   description = "AWS region for router"
 }
-
-variable "client_ip" {
-  description = "Your public IP for SSH access"
-  type        = string
-}

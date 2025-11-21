@@ -68,12 +68,22 @@ resource "aws_security_group_rule" "allow_ssh_from_router" {
   description              = "Allow SSH from router instance"
 }
 
-# Allow SSH from your home IP only
-resource "aws_security_group_rule" "allow_ssh_home" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = [var.client_ip]
-  security_group_id = aws_security_group.router_sg.id
+resource "aws_security_group_rule" "from_router_icmp" {
+  type                     = "ingress"
+  from_port                = -1
+  to_port                  = -1
+  protocol                 = "icmp"
+  security_group_id        = aws_security_group.private_sg.id
+  source_security_group_id = aws_security_group.router_sg.id
+  description              = "Allow ICMP from Tailscale subnet router"
+}
+
+resource "aws_security_group_rule" "from_router_tcp" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.private_sg.id
+  source_security_group_id = aws_security_group.router_sg.id
+  description              = "Allow all TCP from Tailscale subnet router"
 }

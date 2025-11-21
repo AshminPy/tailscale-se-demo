@@ -5,7 +5,7 @@ resource "aws_instance" "private" {
   key_name      = var.ssh_key_name
 
   vpc_security_group_ids = [
-    aws_security_group.router_sg.id
+    aws_security_group.private_sg.id
   ]
 
   # No public IP

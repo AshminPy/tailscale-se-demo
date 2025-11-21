@@ -39,8 +39,3 @@ variable "ssh_key_name" {
   description = "SSH key name"
   type        = string
 }
-
-variable "client_ip" {
-  description = "client public IP for SSH access"
-  type        = string
-}

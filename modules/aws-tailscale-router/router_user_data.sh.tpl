@@ -21,8 +21,10 @@ TSKEY=$(aws secretsmanager get-secret-value \
   --region ${region})
 
 # Enable IP forwarding
-sysctl -w net.ipv4.ip_forward=1
-echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+sudo sysctl -p
+
 
 # Start Tailscale
 tailscale up \

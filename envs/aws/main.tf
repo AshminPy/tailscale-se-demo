@@ -13,6 +13,4 @@ module "aws_tailscale_router" {
   tailscale_auth_key = var.tailscale_auth_key
   aws_region         = var.aws_region
   ssh_key_name       = var.ssh_key_name
-
-  client_ip = var.client_ip
 }
