@@ -86,39 +86,54 @@ aws secretsmanager update-secret \
 
 ## Deployment Steps
 
-```
 # Step 1: Clone repo
 
+```
 git clone https://github.com/AshminPy/tailscale-se-demo.git
 cd tailscale-se-demo
+```
 
 # Step 2: Go to AWS environment
 
+```
 cd envs/aws
+```
 
 # Step 3: Initialize Terraform (uses S3/DynamoDB backend)
 
+```
 terraform init
+```
 
 # Step 4: Review plan
 
+```
 terraform plan
+```
 
 # Step 5: Apply
 
+```
 terraform apply -auto-approve
 ```
 
 ## Verification
 
-```
 # 1. Confirm subnet router is visible
+
+```
 tailscale status
+```
 
 # 2. Ping private EC2
+
+```
 tailscale ping 10.10.2.10
+```
 
 # 3. SSH via Tailscale
+
+```
 ssh ubuntu@10.10.2.10
 ```
 
@@ -129,8 +144,11 @@ Success = routing active, advertise-routes working, private EC2 accessible.
 ```
 cd envs/aws
 terraform destroy -auto-approve
+```
 
 # (Optional) delete secret
+
+```
 aws secretsmanager delete-secret --secret-id ts-aws-demo-tailscale-auth
 ```
 
