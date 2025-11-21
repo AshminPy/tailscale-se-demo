@@ -67,3 +67,13 @@ resource "aws_security_group_rule" "allow_ssh_from_router" {
   source_security_group_id = aws_security_group.router_sg.id
   description              = "Allow SSH from router instance"
 }
+
+# Allow SSH from your home IP only
+resource "aws_security_group_rule" "allow_ssh_home" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = [var.my_home_ip]
+  security_group_id = aws_security_group.router_sg.id
+}

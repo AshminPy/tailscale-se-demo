@@ -55,3 +55,23 @@ output "private_sg_id" {
   description = "Security group ID for the private EC2 instance"
   value       = aws_security_group.private_sg.id
 }
+
+output "router_instance_id" {
+  description = "The EC2 instance ID for the Tailscale router"
+  value       = aws_instance.router.id
+}
+
+output "router_private_ip" {
+  description = "Private IP of the router EC2 instance"
+  value       = aws_instance.router.private_ip
+}
+
+output "tailscale_secret_arn" {
+  description = "ARN of the Tailscale auth key secret"
+  value       = aws_secretsmanager_secret.tailscale_auth.arn
+}
+
+output "router_eip" {
+  description = "Elastic IP assigned to the Tailscale router"
+  value       = aws_eip.router_eip.public_ip
+}

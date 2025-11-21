@@ -47,3 +47,19 @@ output "private_sg_id" {
   description = "Security group ID for the private EC2 instance"
   value       = module.aws_tailscale_router.private_sg_id
 }
+
+output "router_instance_id" {
+  value = module.aws_tailscale_router.router_instance_id
+}
+
+output "router_private_ip" {
+  value = module.aws_tailscale_router.router_private_ip
+}
+
+output "tailscale_secret_arn" {
+  value = module.aws_tailscale_router.tailscale_secret_arn
+}
+
+output "router_eip" {
+  value = module.aws_tailscale_router.router_eip
+}

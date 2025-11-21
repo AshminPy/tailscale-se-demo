@@ -31,24 +31,34 @@ variable "tags" {
   default     = {}
 }
 
-# variable "ami_id" {
-#   description = "AMI ID for EC2 instances"
-#   type        = string
-# }
+variable "ami_id" {
+  description = "AMI ID for EC2 instances"
+  type        = string
+}
 
-# variable "instance_type" {
-#   description = "EC2 instance type"
-#   type        = string
-#   default     = "t2.micro"
-# }
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
 
-# variable "ssh_key_name" {
-#   description = "SSH key name"
-#   type        = string
-# }
+variable "ssh_key_name" {
+  description = "SSH key name"
+  type        = string
+}
 
 variable "tailscale_auth_key" {
   description = "Tailscale auth key used for router setup"
   type        = string
   sensitive   = true
+}
+
+variable "aws_region" {
+  type        = string
+  description = "AWS region for router"
+}
+
+variable "my_home_ip" {
+  description = "Your public IP for SSH access"
+  type        = string
 }
