@@ -40,7 +40,7 @@ variable "ssh_key_name" {
   type        = string
 }
 
-variable "my_home_ip" {
-  description = "Your public IP for SSH access"
+variable "client_ip" {
+  description = "client public IP for SSH access"
   type        = string
 }

@@ -14,7 +14,5 @@ module "aws_tailscale_router" {
   aws_region         = var.aws_region
   ssh_key_name       = var.ssh_key_name
 
-  my_home_ip = var.my_home_ip
-
-
+  client_ip = var.client_ip
 }

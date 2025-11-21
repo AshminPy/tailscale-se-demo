@@ -74,6 +74,6 @@ resource "aws_security_group_rule" "allow_ssh_home" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = [var.my_home_ip]
+  cidr_blocks       = [var.client_ip]
   security_group_id = aws_security_group.router_sg.id
 }
