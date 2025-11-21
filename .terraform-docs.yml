@@ -1,0 +1,16 @@
+formatter: markdown table
+
+sections:
+  show:
+    - header
+    - requirements
+    - providers
+    - resources
+    - inputs
+    - outputs
+    - modules
+    - footer
+
+output:
+  file: Terraform-resource.md
+  mode: replace
