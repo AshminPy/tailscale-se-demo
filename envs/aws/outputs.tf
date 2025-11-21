@@ -63,3 +63,11 @@ output "tailscale_secret_arn" {
 output "router_eip" {
   value = module.aws_tailscale_router.router_eip
 }
+
+output "private_instance_id" {
+  value = module.aws_tailscale_router.private_instance_id
+}
+
+output "private_instance_private_ip" {
+  value = module.aws_tailscale_router.private_instance_private_ip
+}

@@ -75,3 +75,13 @@ output "router_eip" {
   description = "Elastic IP assigned to the Tailscale router"
   value       = aws_eip.router_eip.public_ip
 }
+
+output "private_instance_id" {
+  description = "Private EC2 instance ID"
+  value       = aws_instance.private.id
+}
+
+output "private_instance_private_ip" {
+  description = "Private EC2 IP"
+  value       = aws_instance.private.private_ip
+}
