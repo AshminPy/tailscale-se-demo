@@ -23,17 +23,6 @@ resource "aws_security_group" "router_sg" {
   )
 }
 
-# Allow SSH only from Tailscale IP ranges (updated later)
-resource "aws_security_group_rule" "router_allow_ssh_from_tailnet" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  security_group_id = aws_security_group.router_sg.id
-  cidr_blocks       = ["100.64.0.0/10"]
-  description       = "Allow SSH from Tailscale"
-}
-
 # Private Instance SG (EC2 in Private Subnet)
 resource "aws_security_group" "private_sg" {
   name        = "${var.prefix}-private-sg"
@@ -55,6 +44,17 @@ resource "aws_security_group" "private_sg" {
       name = "${var.prefix}-private-sg"
     }
   )
+}
+
+# Allow SSH only from Tailscale IP ranges (updated later)
+resource "aws_security_group_rule" "router_allow_ssh_from_tailnet" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.router_sg.id
+  cidr_blocks       = ["100.64.0.0/10"]
+  description       = "Allow SSH from Tailscale"
 }
 
 # Allow SSH from router SG only
