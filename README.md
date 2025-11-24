@@ -2,6 +2,31 @@
 
 This repository demonstrates how to deploy a **Tailscale Subnet Router** on **AWS using Terraform**, following **production-ready patterns**.
 
+You can run the demo in two ways:
+
+1. Local Terraform (simple)
+2. GitHub Actions + AWS OIDC (no AWS keys, full CI)
+
+## 1. Business Value (Why This Matters)
+
+**Tailscale Subnet Router** lets you reach private AWS resources **without**:
+
+- VPN appliances
+- Bastion hosts
+- Public IPs
+- Opening many ports
+- Managing SSH keys manually
+
+## Benefits
+
+- **Zero-trust access** (identity-based)
+- **Encrypted point-to-point traffic** (WireGuard)
+- **No public exposure**
+- **Simple routing** (advertise one subnet)
+- **Cross-cloud friendly** (AWS, GCP, home lab, laptop)
+
+This demo replaces slow, complex VPN designs with a clean modern approach.
+
 ---
 
 ## Deployment resources
@@ -55,6 +80,11 @@ Use cases: replace VPNs, cross-cloud access, secure internal connectivity.
 - Terraform `>=1.5`
 - Git
 - Tailscale account (Admin)
+- pre-commit
+- tflint
+- tfsec
+- terraform-docs
+- tailscale
 
 ### Tailscale Auth Key
 
@@ -92,26 +122,35 @@ aws secretsmanager update-secret \
 
 ## Deployment Steps
 
-### Step 1: Clone repo
+### Method A - Run Locally
+
+#### Step 1: Clone repo
 
 ```
 git clone https://github.com/AshminPy/tailscale-se-demo.git
 cd tailscale-se-demo
 ```
 
-### Step 2: Go to AWS environment
+#### Step 2: Install & Run pre-commit
+
+```
+pre-commit install
+pre-commit run --all-files
+```
+
+#### Step 2: Go to AWS environment
 
 ```
 cd envs/aws
 ```
 
-### Step 3: Initialize Terraform (uses S3/DynamoDB backend)
+#### Step 3: Initialize Terraform (uses S3/DynamoDB backend)
 
 ```
 terraform init
 ```
 
-### Step 4: Review plan
+#### Step 4: Review plan
 
 ```
 terraform plan
@@ -144,6 +183,91 @@ ssh ubuntu@10.10.2.10
 ```
 
 Success = routing active, advertise-routes working, private EC2 accessible.
+
+### Method B — GitHub Actions (OIDC + CI/CD)
+
+You can run Terraform plan and apply through GitHub Actions without storing AWS credentials.
+
+## Create GitHub OIDC IAM Role
+
+reference: https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws
+
+sample : using cloudformation
+
+```
+AWSTemplateFormatVersion: "2010-09-09"
+Description: GitHub OIDC + IAM Role for Terraform CI
+
+Resources:
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 2b18947a6a9fc7764sdd8b5fb18a863b0c6dac24f
+
+  GitHubTerraformRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: terraform-git-ci-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GitHubOIDCProvider
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:sub: "repo:<GITHUB_USER>/<REPO>:ref:refs/heads/main"
+
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AmazonVPCFullAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/IAMReadOnlyAccess
+
+      Policies:
+        - PolicyName: RWSecrets
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - secretsmanager:PutSecretValue
+                  - secretsmanager:GetResourcePolicy
+                  - secretsmanager:CreateSecret
+                Resource: "*"
+```
+
+Note you can also use git secrets for storing secrets example:
+
+```
+AWS_ROLE_ARN      arn:aws:iam::123456789012:role/github-oidc-role
+AWS_REGION        ca-central-1
+TS_SECRET_NAME    ts-aws-demo-tailscale-auth
+EC2_KEY_SECRET    ts-aws-demo-ec2-key
+
+```
+
+#### Run CI Workflow
+
+```
+git add .
+git commit -m "trigger ci"
+git push
+
+```
+
+Current workflow shows The workflow does:
+
+terraform init
+terraform plan
+(as its a test demo - I am running tf apply locally , but you can add tf apply to the actions flow and enable on PR merge )
 
 ## Cleanup
 
